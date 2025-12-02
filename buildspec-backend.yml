@@ -1,0 +1,58 @@
+## ----------------------------------------------------------------------------------------------------
+## 작성목적 : jeju-backend 백엔드 애플리케이션 빌드/배포용 AWS CodeBuild 스펙
+## 작성일 : 2025-12-02
+##
+## 변경사항 내역 (날짜 | 변경목적 | 변경내용 | 작성자 순으로 기입)
+## 2025-12-02 | 최초 구현 | 기본 buildspec-backend.yml 스캐폴딩 생성 | 이재인
+## ----------------------------------------------------------------------------------------------------
+
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "ap-northeast-2"
+    ACCOUNT_ID: "002574137794"
+    IMAGE_REPO_NAME: "jeju-ormi4"
+    INFRA_REPO: "team-invisible/jeju-infra"
+    INFRA_REPO_DIR: "jeju-infra"
+  parameter-store:
+    GITHUB_TOKEN: "/jeju/github/token"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION \
+        | docker login \
+          --username AWS \
+          --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - echo Preparing image tag...
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7 || echo "local")
+      - IMAGE_TAG=$COMMIT_HASH
+      - echo "IMAGE_TAG=$IMAGE_TAG"
+
+  build:
+    commands:
+      - echo Building Maven project and Docker image...
+      - mvn -B -DskipTests package
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG \
+        $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Pushing image to ECR...
+      - docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+
+      - echo Updating infra repo manifest...
+      - git config --global user.name "codebuild-bot"
+      - git config --global user.email "codebuild-bot@example.com"
+      - git clone https://$GITHUB_TOKEN@github.com/$INFRA_REPO.git $INFRA_REPO_DIR
+      - cd $INFRA_REPO_DIR
+      - sed -i "s#image: .*#image: $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG#g" k8s/backend/deployment.yaml
+      - git commit -am "backend: update image to $IMAGE_TAG" || echo "No changes"
+      - git push origin main || echo "Nothing pushed"
+
+artifacts:
+  files:
+    - '**/*'
