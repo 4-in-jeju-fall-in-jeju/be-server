@@ -44,14 +44,14 @@ phases:
       - echo Pushing image to ECR...
       - docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
 
-      - echo Updating infra repo manifest...
+      - echo Cloning infra repo and updating image tag...
       - git config --global user.name "codebuild-bot"
       - git config --global user.email "codebuild-bot@example.com"
       - git clone https://$GITHUB_TOKEN@github.com/$INFRA_REPO.git $INFRA_REPO_DIR
       - cd $INFRA_REPO_DIR
       - sed -i "s#image: .*#image: $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG#g" k8s/backend/deployment.yaml
-      - git commit -am "backend: update image to $IMAGE_TAG" || echo "No changes"
-      - git push origin main || echo "Nothing pushed"
+      - git commit -am "backend: update image to $IMAGE_TAG" || echo "No changes to commit"
+      - git push origin main || echo "No changes pushed"
 
 artifacts:
   files:
