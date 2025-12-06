@@ -1,7 +1,8 @@
 # be-server
 
 # 1. 📁 전체 폴더 구조
-> Controller / Service / Model / Infrastructure 계층 분리 가이드
+> Controller / Service / Model / Infrastructure 계층 분리 가이드 (참고용)
+
 
 ```md
 src
