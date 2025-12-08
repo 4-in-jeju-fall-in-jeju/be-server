@@ -49,9 +49,20 @@ phases:
       - git remote set-url origin https://${GITHUB_TOKEN}@github.com/4-in-jeju-fall-in-jeju/be-server.git
       - echo "Committing changes..."
       - git add k8s-manifests/deployment.yml
-      - git diff --cached --exit-code || git commit -m "chore: Update image to $IMAGE_TAG [skip ci]"
+      - |
+        if ! git diff --cached --exit-code > /dev/null; then
+          git commit -m "chore: Update image to $IMAGE_TAG [skip ci]"
+          echo "Changes committed"
+        else
+          echo "No changes to commit"
+        fi
       - echo "Pushing to GitHub..."
-      - git push origin HEAD:main || echo "No changes to push"
+      - |
+        if git push origin HEAD:main; then
+          echo "Successfully pushed to GitHub"
+        else
+          echo "No changes to push or push failed"
+        fi
 
 # 빌드 아티팩트 (선택사항)
 artifacts:
