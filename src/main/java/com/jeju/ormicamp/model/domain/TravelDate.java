@@ -31,5 +31,16 @@ public class TravelDate {
 
     private LocalDateTime updateDate;
 
+    public void updateDate(LocalDate startDate, LocalDate endDate) {
+
+        if (startDate != null) {
+            this.startDate = startDate;
+        }
+        if (endDate != null) {
+            this.endDate = endDate;
+        }
+
+    }
+
 
 }
