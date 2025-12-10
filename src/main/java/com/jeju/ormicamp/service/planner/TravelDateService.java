@@ -16,10 +16,11 @@ public class TravelDateService {
 
     public Long saveDate(TravelDateReqDto dto) {
 
-        // TODO : user 예외처리 확인
+        if(dto.getEndDate().isBefore(dto.getStartDate())){
+            // TODO : 에러 CustomException 도입 시 변경
+            throw new IllegalArgumentException(ErrorCode.UNKNOWN_ERROR.getMessage());
+        }
 
-        // TODO : endDate > startDate 검증
-        // TODO : 메서드화
         TravelDate travelDate = TravelDate.builder()
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
