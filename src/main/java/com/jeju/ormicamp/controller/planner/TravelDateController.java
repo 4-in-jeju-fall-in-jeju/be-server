@@ -15,12 +15,24 @@ public class TravelDateController {
     private final TravelDateService travelDateService;
 
     @PostMapping("/date")
-    public ResponseEntity<BaseResponse<Boolean>> date(
-            @RequestBody TravelDateReqDto dto) {
+    public ResponseEntity<BaseResponse<Long>> date(
+            @RequestBody TravelDateReqDto dto
+    ) {
 
-        travelDateService.saveDate(dto);
+        Long id = travelDateService.saveDate(dto);
 
         return ResponseEntity.ok()
-                .body(BaseResponse.success("날짜 저장성공",Boolean.TRUE));
+                .body(BaseResponse.success("날짜 저장성공",id));
+    }
+
+    @PatchMapping("/update/{travelDateId}")
+    public ResponseEntity<BaseResponse<Boolean>> update(
+            @PathVariable Long travelDateId,
+            @RequestBody TravelDateReqDto dto
+    ){
+        travelDateService.updateDate(travelDateId,dto);
+
+        return ResponseEntity.ok()
+                .body(BaseResponse.success("날짜 정보 수정",Boolean.TRUE));
     }
 }
