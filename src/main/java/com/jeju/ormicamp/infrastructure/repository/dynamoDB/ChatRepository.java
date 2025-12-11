@@ -22,7 +22,7 @@ public class ChatRepository {
 
     public ChatRepository(DynamoDbEnhancedClient enhancedClient) {
         // 테이블 이름 "JejuTravel" (AWS 콘솔에서 만든 이름과 같아야 함)
-        this.table = enhancedClient.table("JejuTravel", TableSchema.fromBean(ChatEntity.class));
+        this.table = enhancedClient.table("fall-in-jeju", TableSchema.fromBean(ChatEntity.class));
     }
 
     // 1. 저장 (뭐든지 저장 가능)
