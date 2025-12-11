@@ -28,9 +28,9 @@ spring:
       - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
 
 aws:
-  region: ${DYNAMODB_REGION}
-  access-key: ${AWS_ACCESS_KEY}
-  secret-key: ${AWS_SECRET_KEY}
+  region: ap-northeast-2
+  access-key: ${DYNAMODB_ACCESS_KEY}
+  secret-key: ${DYNAMODB_SECRET_KEY}
 
   dynamodb:
     table-name: four-in-jeju

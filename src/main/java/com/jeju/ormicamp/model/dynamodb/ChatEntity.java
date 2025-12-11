@@ -48,6 +48,9 @@ public class ChatEntity {
     @DynamoDbAttribute("SK") // 실제 DB 컬럼 이름
     public String getSk() { return sk; }
 
+    public void setSessionId(String sessionId) {
+    }
+
     // --- 내부 클래스 (장소 정보) ---
     @Getter @Setter @DynamoDbBean
     public static class PlaceItem {
