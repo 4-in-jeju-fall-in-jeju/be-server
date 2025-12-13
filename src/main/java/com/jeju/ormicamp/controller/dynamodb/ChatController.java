@@ -21,16 +21,17 @@ public class ChatController {
     // --- [API 1] 메시지 저장 ---
     // 프론트엔드에서 유저가 메시지를 보냈을 때,
     // 혹은 AI API에서 응답을 받았을 때 호출
-    @PostMapping("/{sessionId}")
+    @PostMapping
     public ResponseEntity<String> saveMessage(
-            @PathVariable String sessionId,
             @RequestBody ChatReqDto request) { // 1. ReqDto로 받음
-        System.out.println("🚩 [Controller 도착] 요청 받음! sessionId: " + sessionId);
+        String sessionId = request.getSessionId();
         // DTO에서 데이터를 꺼내서 서비스로 넘김
-        // [임시 기능] 클라이언트가 "new"라고 보내면 서버가 랜덤 ID 생성
-        if ("new".equalsIgnoreCase(sessionId)) {
+        // 프론트에서 ID를 안 보냈다면? (첫 채팅) -> 서버가 새로 생성
+        if (sessionId == null || sessionId.isEmpty()) {
             sessionId = UUID.randomUUID().toString();
-            System.out.println("✨ [새 세션 생성] 임시 ID 발급: " + sessionId);
+            System.out.println("✨ [새 세션 시작] ID 발급: " + sessionId);
+        } else {
+            System.out.println("🔄 [대화 이어하기] ID: " + sessionId);
         }
         chatService.saveChatMessage(sessionId, request.getRole(), request.getContent());
         return ResponseEntity.ok(sessionId);
@@ -46,6 +47,7 @@ public class ChatController {
     // (내부 클래스) 요청 받을 때 쓸 DTO
     @Data
     public static class ChatRequestDto {
+        private String sessionId;
         private String role;    // "USER" or "AI"
         private String content; // 메시지 내용
     }

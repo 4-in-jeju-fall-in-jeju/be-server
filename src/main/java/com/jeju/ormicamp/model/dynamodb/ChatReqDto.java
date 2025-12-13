@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor // 기본 생성자 (JSON 파싱할 때 필요)
 public class ChatReqDto {
 
+    private String sessionId;
     private String role;    // "USER" 또는 "AI"
     private String content; // "제주도 맛집 알려줘"
 
