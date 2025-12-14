@@ -5,7 +5,7 @@ metadata:
   labels:
     app: backend-app
 spec:
-  replicas: 3
+  replicas: 1 # Default value
   selector:
     matchLabels:
       app: backend-app
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend-app-container
-        image: 310688446727.dkr.ecr.ap-northeast-2.amazonaws.com/backend-app:e657ed3
+        image: 310688446727.dkr.ecr.ap-northeast-2.amazonaws.com/backend-app:66a09d6
         ports:
         - containerPort: 8001
         resources:
@@ -28,14 +28,13 @@ spec:
             memory: "256Mi"
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: production # Spring Boot 프로파일 설정
-        - name: SPRING_DATASOURCE_URL # H2 인메모리 DB 설정
+          value: local # Default to local or dev, overridden by overlay
+        - name: SPRING_DATASOURCE_URL
           value: "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
         - name: SPRING_DATASOURCE_USERNAME
-          value: "sa" # H2 기본 사용자 이름
+          value: "sa"
         - name: SPRING_DATASOURCE_PASSWORD
-          value: "" # H2 기본 비밀번호 (없음)
-        # DynamoDB 자격 증명 (Kubernetes Secret에서 가져옴)
+          value: ""
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
@@ -61,3 +60,4 @@ spec:
             secretKeyRef:
               name: dynamodb-credentials
               key: AWS_SECRET_ACCESS_KEY
+
