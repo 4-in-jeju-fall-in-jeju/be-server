@@ -1,5 +1,7 @@
 package com.jeju.ormicamp.service.dynamodb;
 
+import com.jeju.ormicamp.common.exception.CustomException;
+import com.jeju.ormicamp.common.exception.ErrorCode;
 import com.jeju.ormicamp.infrastructure.repository.dynamoDB.ChatRepository;
 import com.jeju.ormicamp.model.dynamodb.ChatEntity;
 import com.jeju.ormicamp.model.dynamodb.ChatResDto;
@@ -63,6 +65,10 @@ public class ChatService {
 
     // 시나리오 2: 내 여행 목록 가져오기
     public List<ChatEntity> getMySessions(String userId) {
+
+        if (userId == null) {
+            throw new CustomException(ErrorCode.CHAT_SESSION_MISSING);
+        }
         // PK 조립은 Repository가 하거나 여기서 넘겨주거나 선택
         return repository.findSessionsByUserId(userId);
     }
@@ -74,6 +80,9 @@ public class ChatService {
         // 1. DB에서 일단 다 가져옵니다. (여기까진 Entity 상태)
         List<ChatEntity> entities = repository.findAllInSession(sessionId);
 
+        if (entities.isEmpty()) {
+            throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
+        }
         // 2. 변환 작업(Mapping)을 수행
         return entities.stream()
                 // 혹시 플래너 데이터(PLAN)가 섞여 있을 수 있으니 "CHAT"만 거릅니다.

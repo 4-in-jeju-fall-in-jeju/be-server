@@ -1,5 +1,7 @@
 package com.jeju.ormicamp.service.dynamodb;
 
+import com.jeju.ormicamp.common.exception.CustomException;
+import com.jeju.ormicamp.common.exception.ErrorCode;
 import com.jeju.ormicamp.model.dynamodb.ChatEntity;
 import com.jeju.ormicamp.model.dynamodb.PlaceItemDto;
 import com.jeju.ormicamp.model.dynamodb.PlannerReqDto;
@@ -25,6 +27,13 @@ public class PlannerService {
      * AI가 짜준 코스나, 사용자가 변경한 코스를 저장
      */
     public void updatePlanner(PlannerReqDto reqDto) {
+        if (reqDto.getSessionId() == null || reqDto.getSessionId().isEmpty()) {
+            throw new CustomException(ErrorCode.PLAN_SESSION_MISSING);
+        }
+        if (reqDto.getDate() == null) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
         ChatEntity entity = new ChatEntity();
 
         // 1. Key 생성 로직 (Single Table Design의 핵심)
@@ -50,10 +59,11 @@ public class PlannerService {
      * 특정 날짜 플래너 조회
      */
     public PlannerResDto getPlanner(String sessionId, String date) {
+        if (sessionId == null) throw new CustomException(ErrorCode.PLAN_SESSION_MISSING);
         ChatEntity entity = plannerRepository.findPlanBySessionAndDate(sessionId, date);
 
         if (entity == null) {
-            return null; // 또는 빈 객체 반환
+            throw new CustomException(ErrorCode.PLAN_NOT_FOUND);
         }
 
         return convertToResDto(entity);
@@ -63,6 +73,7 @@ public class PlannerService {
      * 세션의 전체 일정 조회
      */
     public List<PlannerResDto> getAllPlanners(String sessionId) {
+        if (sessionId == null) throw new CustomException(ErrorCode.PLAN_SESSION_MISSING);
         List<ChatEntity> entities = plannerRepository.findAllPlansBySession(sessionId);
 
         return entities.stream()
@@ -74,6 +85,7 @@ public class PlannerService {
      * 플래너 삭제 (특정 날짜 일정 삭제)
      */
     public void deletePlanner(String sessionId, String date) {
+        if (sessionId == null) throw new CustomException(ErrorCode.PLAN_SESSION_MISSING);
         plannerRepository.deletePlan(sessionId, date);
     }
 
