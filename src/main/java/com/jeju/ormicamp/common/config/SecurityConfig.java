@@ -2,6 +2,7 @@ package com.jeju.ormicamp.common.config;
 
 import com.jeju.ormicamp.common.jwt.JwtAuthorizationFilter;
 import com.jeju.ormicamp.common.jwt.util.JWTUtil;
+import com.jeju.ormicamp.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,10 +18,12 @@ public class SecurityConfig {
 
     private final JWTUtil jwtUtil;
     private final OriginVerifyFilter originVerifyFilter;
+    private final UserService userService;
 
-    public SecurityConfig(JWTUtil jwtUtil, OriginVerifyFilter originVerifyFilter) {
+    public SecurityConfig(JWTUtil jwtUtil, OriginVerifyFilter originVerifyFilter, UserService userService) {
         this.jwtUtil = jwtUtil;
         this.originVerifyFilter = originVerifyFilter;
+        this.userService = userService;
     }
 
     @Bean
@@ -43,7 +46,7 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(originVerifyFilter, UsernamePasswordAuthenticationFilter.class) // X-Origin-Verify 필터 추가
                 .addFilterBefore(
-                        new JwtAuthorizationFilter(jwtUtil),
+                        new JwtAuthorizationFilter(jwtUtil,userService),
                         UsernamePasswordAuthenticationFilter.class
                 );
         return http.build();
