@@ -3,6 +3,7 @@ package com.jeju.ormicamp.service.Bedrock;
 import com.jeju.ormicamp.common.config.bedrock.AwsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.async.SdkPublisher;
 import software.amazon.awssdk.services.bedrockagentruntime.BedrockAgentRuntimeAsyncClient;
@@ -13,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
-//@Service
+@Service
 @RequiredArgsConstructor
 public class BedRockAgentService {
 

@@ -29,6 +29,10 @@ public class TravelInfo {
 
     private LocalDate endDate;
 
+    private Long Capacity;
+
+    private Long Money;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createDate;
