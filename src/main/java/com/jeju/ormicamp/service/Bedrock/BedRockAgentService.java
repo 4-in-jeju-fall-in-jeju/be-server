@@ -28,7 +28,6 @@ public class BedRockAgentService {
         InvokeAgentRequest request = InvokeAgentRequest.builder()
                 // .agentId(awsProperties.getAgentId())
                 // .agentAliasId(awsProperties.getAliasId())
-                // 얘는 실제 seesionId아니고 그 역할하는 Id 값
                 .sessionId(agentSessionId)
                 .inputText(jsonData)
                 .enableTrace(true)

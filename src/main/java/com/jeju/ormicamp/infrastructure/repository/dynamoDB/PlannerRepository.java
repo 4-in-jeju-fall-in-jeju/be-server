@@ -1,6 +1,6 @@
 package com.jeju.ormicamp.infrastructure.repository.dynamoDB;
 
-import com.jeju.ormicamp.model.dynamodb.ChatEntity;
+import com.jeju.ormicamp.model.domain.ChatEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

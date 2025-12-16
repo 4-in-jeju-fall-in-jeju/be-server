@@ -1,4 +1,4 @@
-package com.jeju.ormicamp.model.dynamodb;
+package com.jeju.ormicamp.model.domain;
 
 import lombok.Getter;
 import lombok.Setter;

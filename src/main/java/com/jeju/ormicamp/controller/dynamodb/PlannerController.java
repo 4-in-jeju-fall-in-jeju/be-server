@@ -1,11 +1,7 @@
 package com.jeju.ormicamp.controller.dynamodb;
 
 import com.jeju.ormicamp.common.dto.BaseResponse;
-import com.jeju.ormicamp.model.dynamodb.PlannerReqDto;
-import com.jeju.ormicamp.model.dynamodb.PlannerResDto;
-import com.jeju.ormicamp.model.dynamodb.PlannerResDto.*;
-import com.jeju.ormicamp.model.dynamodb.PlaceItemDto.*;
-import com.jeju.ormicamp.model.dynamodb.PlannerReqDto.*;
+import com.jeju.ormicamp.model.dto.dynamodb.PlannerReqDto;
 import com.jeju.ormicamp.service.dynamodb.PlannerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

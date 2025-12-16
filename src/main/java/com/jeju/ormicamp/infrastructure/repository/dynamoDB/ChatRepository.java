@@ -1,18 +1,13 @@
 package com.jeju.ormicamp.infrastructure.repository.dynamoDB;
 
-import com.jeju.ormicamp.model.dynamodb.ChatEntity; // 아까 만든 Entity import
+import com.jeju.ormicamp.model.domain.ChatEntity; // 아까 만든 Entity import
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
-import org.springframework.stereotype.Repository;
-import software.amazon.awssdk.enhanced.dynamodb.*;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
-
 import java.util.ArrayList;
 
 @Repository

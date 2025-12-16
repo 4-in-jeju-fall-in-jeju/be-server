@@ -3,8 +3,7 @@ package com.jeju.ormicamp.service.dynamodb;
 import com.jeju.ormicamp.common.exception.CustomException;
 import com.jeju.ormicamp.common.exception.ErrorCode;
 import com.jeju.ormicamp.infrastructure.repository.dynamoDB.ChatRepository;
-import com.jeju.ormicamp.model.dynamodb.ChatEntity;
-import com.jeju.ormicamp.model.dynamodb.ChatResDto;
+import com.jeju.ormicamp.model.domain.ChatEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,20 +47,20 @@ public class ChatService {
         return newSessionId;
     }
 
-    // 시나리오 1: 새로운 채팅 메시지 저장
-    public void saveChatMessage(String sessionId, String role, String content) {
-        ChatEntity chat = new ChatEntity();
-
-        // 핵심: 여기서 PK/SK 규칙을 적용합니다!
-        chat.setPk("SESSION#" + sessionId);
-        chat.setSk("MSG#" + LocalDateTime.now()); // 시간순 정렬
-
-        chat.setType("CHAT");
-        chat.setRole(role);
-        chat.setContent(content);
-
-        repository.save(chat);
-    }
+//    // 시나리오 1: 새로운 채팅 메시지 저장
+//    public void saveChatMessage(String sessionId, String role, String content) {
+//        ChatEntity chat = new ChatEntity();
+//
+//        // 핵심: 여기서 PK/SK 규칙을 적용합니다!
+//        chat.setPk("SESSION#" + sessionId);
+//        chat.setSk("MSG#" + LocalDateTime.now()); // 시간순 정렬
+//
+//        chat.setType("CHAT");
+//        chat.setRole(role);
+//        chat.setContent(content);
+//
+//        repository.save(chat);
+//    }
 
     // 시나리오 2: 내 여행 목록 가져오기
     public List<ChatEntity> getMySessions(String userId) {
@@ -73,22 +72,22 @@ public class ChatService {
         return repository.findSessionsByUserId(userId);
     }
 
-    // 시나리오 3: 채팅 내역 가져오기
-    // DTO 리스트로 리턴
-    public List<ChatResDto> getChatHistory(String sessionId) {
-
-        // 1. DB에서 일단 다 가져옵니다. (여기까진 Entity 상태)
-        List<ChatEntity> entities = repository.findAllInSession(sessionId);
-
-        if (entities.isEmpty()) {
-            throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
-        }
-        // 2. 변환 작업(Mapping)을 수행
-        return entities.stream()
-                // 혹시 플래너 데이터(PLAN)가 섞여 있을 수 있으니 "CHAT"만 거릅니다.
-                .filter(item -> "CHAT".equals(item.getType()))
-                // ChatResDto의 from 메서드를 통해 변환합니다.
-                .map(ChatResDto::from)
-                .collect(Collectors.toList());
-    }
+//    // 시나리오 3: 채팅 내역 가져오기
+//    // DTO 리스트로 리턴
+//    public List<ChatResDto> getChatHistory(String sessionId) {
+//
+//        // 1. DB에서 일단 다 가져옵니다. (여기까진 Entity 상태)
+//        List<ChatEntity> entities = repository.findAllInSession(sessionId);
+//
+//        if (entities.isEmpty()) {
+//            throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
+//        }
+//        // 2. 변환 작업(Mapping)을 수행
+//        return entities.stream()
+//                // 혹시 플래너 데이터(PLAN)가 섞여 있을 수 있으니 "CHAT"만 거릅니다.
+//                .filter(item -> "CHAT".equals(item.getType()))
+//                // ChatResDto의 from 메서드를 통해 변환합니다.
+//                .map(ChatResDto::from)
+//                .collect(Collectors.toList());
+//    }
 }

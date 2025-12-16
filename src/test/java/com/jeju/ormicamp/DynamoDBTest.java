@@ -1,9 +1,8 @@
 package com.jeju.ormicamp;
 
 import com.jeju.ormicamp.infrastructure.repository.dynamoDB.ChatRepository; // 아까 만든 리포지토리
-import com.jeju.ormicamp.model.dynamodb.ChatResDto;
 import com.jeju.ormicamp.service.dynamodb.ChatService;       // 아까 만든 서비스
-import com.jeju.ormicamp.model.dynamodb.ChatEntity;           // 아까 만든 엔티티
+import com.jeju.ormicamp.model.domain.ChatEntity;           // 아까 만든 엔티티
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
-package com.jeju.ormicamp.model.dynamodb;
+package com.jeju.ormicamp.model.dto.dynamodb;
 
-import com.jeju.ormicamp.model.dynamodb.PlaceItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlannerResDto {
-    private String sessionId;
+public class PlannerReqDto {
     private String date;
-    private List<PlaceItemDto> places;
 }

@@ -1,8 +1,7 @@
 package com.jeju.ormicamp.controller.dynamodb;
 
 import com.jeju.ormicamp.common.dto.BaseResponse;
-import com.jeju.ormicamp.model.dynamodb.ChatReqDto;
-import com.jeju.ormicamp.model.dynamodb.ChatResDto;
+import com.jeju.ormicamp.model.dto.dynamodb.ChatReqDto;
 import com.jeju.ormicamp.service.dynamodb.ChatService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
