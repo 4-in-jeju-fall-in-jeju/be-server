@@ -25,14 +25,10 @@ public class ChatEntity {
 
     // 3. 채팅용 속성
     private String role;    // "USER", "AI"
-    private String content; // "맛집 추천해줘"
+    private String pompt; // "맛집 추천해줘"
 
     // 4. 여행 목록(Meta)용 속성
     private String sessionTitle; // "제주 3박 4일 여행"
-    private String startDate; // 여행 시작 날짜 "2025-12-12"
-    private String endDate; // 여행 끝 날짜 "2025-12-15"
-    private String capacity; // 인원 수 "3"
-
 
     // 5. 플래너용 속성 (복잡한 객체 리스트)
     private String date; // "2025-12-25"
