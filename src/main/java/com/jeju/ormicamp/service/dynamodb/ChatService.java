@@ -32,10 +32,42 @@ public class ChatService {
     private final MakeJsonService makeJsonService;
 
     /**
-     * 처음 채팅을
+     * 새로운 채팅 세션을 시작합니다.
      *
-     * @param req 채팅 입력 시 정보를 받아옵니다.
-     * @return agent를 거쳐 생성된 Response 값을 반환 합니다.
+     * <p>
+     * 사용자의 여행 정보를 기반으로 대화 세션(conversationId)을 생성하고,
+     * 해당 세션의 메타 데이터(META)를 DynamoDB에 저장합니다.
+     * </p>
+     *
+     * <h3>처리 흐름</h3>
+     * <ol>
+     *   <li>conversationId(UUID) 생성</li>
+     *   <li>사용자의 여행 정보(TravelInfo) 조회</li>
+     *   <li>META 데이터 저장 (대화 제목, 여행 스냅샷)</li>
+     *   <li>사용자 첫 메시지 저장</li>
+     *   <li>AI 응답 생성 및 저장</li>
+     * </ol>
+     *
+     * <h3>META 데이터란?</h3>
+     * <p>
+     * META는 대화 세션 전체에서 공통으로 사용되는 고정 정보이며,
+     * 다음과 같은 데이터를 포함합니다.
+     * </p>
+     *
+     * <ul>
+     *   <li>conversationId</li>
+     *   <li>채팅 제목(chatTitle)</li>
+     *   <li>여행 정보 스냅샷(TravelInfoSnapshot)</li>
+     * </ul>
+     *
+     * <p>
+     * META 데이터는 대화 시작 시 한 번만 저장되며,
+     * 이후 메시지 전송 시 기준 정보로 활용됩니다.
+     * </p>
+     *
+     * @param req    채팅 시작 시 입력된 요청 정보 (제목, 첫 메시지)
+     * @param userId 현재 로그인한 사용자 ID
+     * @return AI 응답과 conversationId를 포함한 채팅 응답 DTO
      */
     public ChatResDto startChat(ChatReqDto req, Long userId) {
 
@@ -104,10 +136,29 @@ public class ChatService {
     }
 
     /**
+     * 기존 채팅 세션에 메시지를 추가합니다.
      *
-     * @param req
-     * @param userId
-     * @return
+     * <p>
+     * 전달받은 conversationId를 기준으로 META 데이터를 조회한 후,
+     * 사용자의 메시지와 AI 응답을 DynamoDB에 저장합니다.
+     * </p>
+     *
+     * <h3>처리 흐름</h3>
+     * <ol>
+     *   <li>conversationId로 META 데이터 조회</li>
+     *   <li>사용자 메시지 저장</li>
+     *   <li>AI 요청용 JSON Payload 생성</li>
+     *   <li>AI 응답 저장</li>
+     * </ol>
+     *
+     * <p>
+     * META 데이터가 존재하지 않는 경우,
+     * 유효하지 않은 대화 세션으로 판단하여 예외를 발생시킵니다.
+     * </p>
+     *
+     * @param req    사용자가 입력한 메시지 및 conversationId
+     * @param userId 현재 로그인한 사용자 ID
+     * @return AI 응답 메시지를 포함한 채팅 응답 DTO
      */
     public ChatResDto sendMessage(ChatReqDto req, Long userId) {
 
