@@ -8,4 +8,5 @@ import lombok.Getter;
 public class ChatResDto {
     private String conversationId;
     private String message;
+    private String summary;
 }

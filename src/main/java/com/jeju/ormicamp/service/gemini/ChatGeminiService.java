@@ -1,4 +1,4 @@
-package com.jeju.ormicamp.service.dynamodb;
+package com.jeju.ormicamp.service.gemini;
 
 import com.jeju.ormicamp.common.exception.CustomException;
 import com.jeju.ormicamp.common.exception.ErrorCode;
@@ -13,14 +13,10 @@ import com.jeju.ormicamp.model.dto.dynamodb.ChatConversationResDto;
 import com.jeju.ormicamp.model.dto.dynamodb.ChatMessageResDto;
 import com.jeju.ormicamp.model.dto.dynamodb.ChatReqDto;
 import com.jeju.ormicamp.model.dto.dynamodb.ChatResDto;
-//import com.jeju.ormicamp.service.Bedrock.BedRockAgentService;
 import com.jeju.ormicamp.service.Bedrock.MakeJsonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Comparator;
 import java.util.List;
@@ -31,13 +27,12 @@ import static java.time.LocalTime.now;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ChatService {
+public class ChatGeminiService {
 
     private final TravelInfoRepository travelInfoRepository;
     private final ChatDynamoRepository chatRepository;
-    //private final BedRockAgentService agentService;
     private final MakeJsonService makeJsonService;
-    private final ObjectMapper objectMapper;
+    private final AiService aiService;
 
     public ChatResDto startChat(ChatReqDto req, Long userId) {
 
@@ -58,7 +53,6 @@ public class ChatService {
 
         TravelInfoSnapshot response = TravelInfoSnapshot.toSnapshot(travelInfo);
 
-        // TODO : 예외처리
         chatRepository.save(meta);
 
         chatRepository.save(
@@ -77,40 +71,21 @@ public class ChatService {
                 meta.getTravelInfo()
         );
 
-        // TODO : agent 연결 시 주석 해제
-        // String agentResponse = agentService.sendDataToAgent(conversationId, payload).join();
-
-        // 테스트용 더미
-        String agentResponse = """
-                {"content": "[TEST MODE] 제주 여행 일정 예시입니다.\\n- 1일차: 성산일출봉\\n- 2일차: 한라산\\n- 3일차: 카페 투어", "summary": "제주 3일 여행 일정 요약"}
-                """;
-
-        // JSON 파싱하여 content, summary 분리
-        String content = agentResponse;
-        String summary = null;
-        try {
-            JsonNode node = objectMapper.readTree(agentResponse);
-            content = node.has("content") ? node.get("content").asText() : agentResponse;
-            summary = node.has("summary") ? node.get("summary").asText() : null;
-        } catch (Exception e) {
-            log.warn("AI 응답 JSON 파싱 실패, 원본 저장: {}", e.getMessage());
-        }
+        String agentResponse = aiService.invoke(conversationId, payload);
 
         chatRepository.save(
                 ChatEntity.builder()
                         .conversationId(conversationId)
                         .type(ChatType.CHAT)
                         .role(ChatRole.AI)
-                        .prompt(content)
-                        .summary(summary)
+                        .prompt(agentResponse)
                         .timestamp(now().toString())
                         .build()
         );
 
         return ChatResDto.builder()
                 .conversationId(conversationId)
-                .message(content)
-                .summary(summary)
+                .message(agentResponse)
                 .build();
     }
 
@@ -139,35 +114,26 @@ public class ChatService {
 
         // 테스트용 더미
         String agentResponse = """
-                {"content": "[TEST MODE] 제주 여행 일정 예시입니다.\\n- 1일차: 성산일출봉\\n- 2일차: 한라산\\n- 3일차: 카페 투어", "summary": "제주 3일 여행 일정 요약"}
+                [TEST MODE]
+                제주 여행 일정 예시입니다.
+                - 1일차: 성산일출봉
+                - 2일차: 한라산
+                - 3일차: 카페 투어
                 """;
-
-        // JSON 파싱하여 content, summary 분리
-        String msgContent = agentResponse;
-        String summary = null;
-        try {
-            JsonNode node = objectMapper.readTree(agentResponse);
-            msgContent = node.has("content") ? node.get("content").asText() : agentResponse;
-            summary = node.has("summary") ? node.get("summary").asText() : null;
-        } catch (Exception e) {
-            log.warn("AI 응답 JSON 파싱 실패, 원본 저장: {}", e.getMessage());
-        }
 
         chatRepository.save(
                 ChatEntity.builder()
                         .conversationId(conversationId)
                         .type(ChatType.CHAT)
                         .role(ChatRole.AI)
-                        .prompt(msgContent)
-                        .summary(summary)
+                        .prompt(agentResponse)
                         .timestamp(now().toString())
                         .build()
         );
 
         return ChatResDto.builder()
                 .conversationId(conversationId)
-                .message(msgContent)
-                .summary(summary)
+                .message(agentResponse)
                 .build();
     }
 

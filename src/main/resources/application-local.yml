@@ -27,6 +27,10 @@ spring:
        - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
        - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
 
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+
 aws:
   region: ${DYNAMODB_REGION}
   dynamodb:

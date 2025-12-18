@@ -30,6 +30,8 @@ public class ChatEntity {
 
     private String prompt;
 
+    private String summary;  // AI 응답 요약
+
     private String chatTitle;
 
     private TravelInfoSnapshot travelInfo;
