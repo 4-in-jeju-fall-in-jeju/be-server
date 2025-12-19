@@ -37,7 +37,10 @@ public class ChatEntity {
 
     private String chatTitle;
 
-    private String planDate;  // 날짜별 플래너용 날짜 (YYYY-MM-
+    private String planDate;
+
+    private java.util.List<Double> lat;  // 위도 배열
+    private java.util.List<Double> lng;  // 경도 배열
 
     // 마이페이지 조회 api -> type = plan, 조회
     private TravelInfoSnapshot travelInfo;
