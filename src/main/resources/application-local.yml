@@ -11,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -27,6 +27,10 @@ spring:
        - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
        - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
 
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+
 aws:
   region: ${DYNAMODB_REGION}
   dynamodb:
@@ -34,6 +38,8 @@ aws:
     credentials:
       access-key: ${DYNAMODB_ACCESS_KEY}
       secret-key: ${DYNAMODB_SECRET_KEY}
+  bedrock:
+    api-gateway-url: ${BEDROCK_AGENT_API_GATEWAY_URL}
 
   # access-key, secret-key는 DefaultCredentialsProvider가 자동으로 환경변수에서 찾음
   # Local: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY (.env 파일)

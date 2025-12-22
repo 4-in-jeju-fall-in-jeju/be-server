@@ -18,20 +18,31 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @DynamoDbBean
 public class ChatEntity {
 
-    private String pk;
+    private String pk; // 검색 추적 conversationId
     private String sk;
+
+    // user Id 랑 conversationId 시작일 유저iㅇ
 
     private String conversationId;
     private String timestamp;
 
-    // Enum을 만들어야하는지?
-    private ChatType type;
+    private Long userId;
+
+    private ChatType type; // Meta,chat, plan
     private ChatRole role;
 
-    private String prompt;
+    private String prompt; // 일반응답 -> 만약 플래너를 짜주는 내용이면
+
+    private String summary;  // AI 응답 요약
 
     private String chatTitle;
 
+    private String planDate;
+
+    private java.util.List<Double> lat;  // 위도 배열
+    private java.util.List<Double> lng;  // 경도 배열
+
+    // 마이페이지 조회 api -> type = plan, 조회
     private TravelInfoSnapshot travelInfo;
 
     @DynamoDbPartitionKey
@@ -45,6 +56,9 @@ public class ChatEntity {
     public String getSk() {
         if (type == ChatType.PLAN_META) {
             return "META";
+        }
+        if (type == ChatType.PLAN_DAY && planDate != null) {
+            return type.name() + "#" + planDate + "#" + timestamp;
         }
         return type.name() + "#" + timestamp;
     }

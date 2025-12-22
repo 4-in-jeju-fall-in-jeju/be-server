@@ -30,6 +30,9 @@ public class TravelInfoService {
                 .startDate(dto.getStartDate())
                 .user(user)
                 .endDate(dto.getEndDate())
+                .region(dto.getRegion())
+                .themes(dto.getThemes())
+                .language(dto.getLanguage())
                 .build();
         return travelInfoRepository.save(travelInfo);
     }
