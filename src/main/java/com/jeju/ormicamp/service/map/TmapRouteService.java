@@ -30,9 +30,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TmapRouteService {
 
-    @Value("${tmap.app-key}")
-    private String appKey;
-
     private final WebClient tmapWebClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -104,7 +101,6 @@ public class TmapRouteService {
 
         return tmapWebClient.post()
                 .uri("/tmap/routes")
-                .header("appKey", appKey)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
@@ -134,7 +130,6 @@ public class TmapRouteService {
 
         TmapWalkRawResponse raw = tmapWebClient.post()
                 .uri("/tmap/routes/pedestrian")
-                .header("appKey", appKey)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
@@ -163,7 +158,6 @@ public class TmapRouteService {
 
         TransitRawResponse raw = tmapWebClient.post()
                 .uri("/transit/routes/sub")
-                .header("appKey", appKey)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
@@ -232,7 +226,6 @@ public class TmapRouteService {
                         .queryParam("version", "1")
                         .build()
                 )
-                .header("appKey", appKey)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()

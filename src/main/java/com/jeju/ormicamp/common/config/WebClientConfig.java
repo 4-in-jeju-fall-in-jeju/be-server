@@ -1,7 +1,6 @@
 package com.jeju.ormicamp.common.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties(TmapProperties.class)
-@Primary
 public class WebClientConfig {
 
     @Bean
@@ -31,6 +29,7 @@ public class WebClientConfig {
     }
 
     @Bean
+    @Primary
     public WebClient tmapWebClient(TmapProperties props) {
 
         // appKey가 비어있으면 시작부터 터뜨리는 게 디버깅 빠름
