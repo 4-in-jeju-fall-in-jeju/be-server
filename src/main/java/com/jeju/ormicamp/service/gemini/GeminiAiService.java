@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-@Profile("local") // ⭐ 지금은 local에서 Gemini
+@Profile("prod")
 @RequiredArgsConstructor
 public class GeminiAiService implements AiService {
 
