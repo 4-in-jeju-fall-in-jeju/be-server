@@ -56,7 +56,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "http://localhost:5173",
-                "http://localhost:5174"
+                "http://localhost:5174",
+                "https://fall-in-jeju.com"
                 // 배포 프론트 도메인 추가
         ));
 
