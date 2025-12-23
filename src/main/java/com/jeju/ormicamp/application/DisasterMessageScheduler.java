@@ -23,7 +23,7 @@ public class DisasterMessageScheduler {
 
     private final SseService sseService;
 
-    @Scheduled(fixedRate = 15000) // 15초 권장
+    @Scheduled(fixedRate = 30_000) // 15초 권장
     public void heartbeat() {
         sseService.sendPing();
     }

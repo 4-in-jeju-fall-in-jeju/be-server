@@ -15,6 +15,8 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @EnableConfigurationProperties(TmapProperties.class)
 public class WebClientConfig {
 
+    private static final String TMAP_BASE_URL = "https://apis.openapi.sk.com";
+
     @Bean(name = "disasterWebClient")
     public WebClient disasterWebClient() {
         return WebClient.builder()
@@ -30,19 +32,13 @@ public class WebClientConfig {
     @Bean(name = "tmapWebClient")
     public WebClient tmapWebClient(TmapProperties props) {
 
-        if (props.getBaseUrl() == null || props.getBaseUrl().isBlank()) {
-            throw new IllegalStateException(
-                    "TMAP_BASE_URL이 설정되지 않았습니다. (tmap.base-url)"
-            );
-        }
-
         // appKey가 비어있으면 시작부터 터뜨리는 게 디버깅 빠름
         if (props.getAppKey() == null || props.getAppKey().isBlank()) {
             throw new IllegalStateException("TMAP_APP_KEY가 설정되지 않았습니다. (tmap.app-key)");
         }
 
         return WebClient.builder()
-                .baseUrl("https://apis.openapi.sk.com")
+                .baseUrl(TMAP_BASE_URL)
                 // ✅ TMAP 핵심: 헤더 appKey
                 .defaultHeader("appKey", props.getAppKey())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
