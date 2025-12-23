@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-@Profile("prod")
+@Profile("production")
 @RequiredArgsConstructor
 public class GeminiAiService implements AiService {
 
