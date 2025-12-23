@@ -30,7 +30,11 @@ public class WebClientConfig {
     @Bean(name = "tmapWebClient")
     public WebClient tmapWebClient(TmapProperties props) {
 
-        log.info("[TMAP CONFIG] baseUrl = {}", props.getBaseUrl());
+        if (props.getBaseUrl() == null || props.getBaseUrl().isBlank()) {
+            throw new IllegalStateException(
+                    "TMAP_BASE_URL이 설정되지 않았습니다. (tmap.base-url)"
+            );
+        }
 
         // appKey가 비어있으면 시작부터 터뜨리는 게 디버깅 빠름
         if (props.getAppKey() == null || props.getAppKey().isBlank()) {
@@ -38,7 +42,7 @@ public class WebClientConfig {
         }
 
         return WebClient.builder()
-                .baseUrl(props.getBaseUrl())
+                .baseUrl("https://apis.openapi.sk.com")
                 // ✅ TMAP 핵심: 헤더 appKey
                 .defaultHeader("appKey", props.getAppKey())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

@@ -3,7 +3,6 @@ package com.jeju.ormicamp.application;
 import com.jeju.ormicamp.infrastructure.service.SseService;
 import com.jeju.ormicamp.service.disasterMessage.DisasterMessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
