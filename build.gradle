@@ -43,6 +43,7 @@ dependencies {
     //implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'com.mysql:mysql-connector-j:8.3.0'
+    implementation 'org.flywaydb:flyway-core'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
