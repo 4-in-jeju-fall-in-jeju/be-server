@@ -33,7 +33,6 @@ public class TmapRouteService {
 
     @Qualifier("tmapWebClient")
     private final WebClient tmapWebClient;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /* =========================
@@ -83,7 +82,6 @@ public class TmapRouteService {
 
     private SimpleRouteResponse callCar(RouteReqDto req, List<PointDto> waypoints) {
 
-        System.out.println("route 요청 (서비스) - CAR");
         Map<String, Object> body = new HashMap<>();
         body.put("startX", req.origin().lng());
         body.put("startY", req.origin().lat());

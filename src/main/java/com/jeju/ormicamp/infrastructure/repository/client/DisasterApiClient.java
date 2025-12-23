@@ -14,7 +14,7 @@ public class DisasterApiClient {
     @Qualifier("disasterWebClient")
     private final WebClient disasterWebClient;
 
-    public List<ApiDisasterMessage> fetch(int pageNo, int numOfRows) {
+    public List<ApiDisasterMessage> fetch(int pageNo) {
 
         DisasterApiResponse response =
 
@@ -22,7 +22,8 @@ public class DisasterApiClient {
                 .uri("https://www.safetydata.go.kr/V2/api/DSSP-IF-00247"
                         + "?serviceKey=" + "6TUY6NQ533289K20"
                         + "&returnType=json"
-                        + "&crtDt=20251218")
+                        + "&crtDt=20251218"
+                        + "&pageNo=" + pageNo)
                         //+ "&rgnNm=제주도")
                 .retrieve()
                 .bodyToMono(DisasterApiResponse.class)

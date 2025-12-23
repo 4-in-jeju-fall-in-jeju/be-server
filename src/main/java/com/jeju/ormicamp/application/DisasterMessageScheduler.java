@@ -25,6 +25,7 @@ public class DisasterMessageScheduler {
 
     @Scheduled(fixedRate = 30_000) // 15초 권장
     public void heartbeat() {
+        System.out.println("SSE Ping 호출");
         sseService.sendPing();
     }
 }

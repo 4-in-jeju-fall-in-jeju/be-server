@@ -62,23 +62,26 @@ public class DisasterMessageServiceImpl implements DisasterMessageService {
     @Override
     @Transactional
     public void fetchAndSaveDisasterMessages() {
-        List<ApiDisasterMessage> apiMessages = disasterApiClient.fetch(1, 100);
+        for (int i = 1; i <= 3; i++) {
+            List<ApiDisasterMessage> apiMessages = disasterApiClient.fetch(i);
 
-        for (ApiDisasterMessage api : apiMessages) {
+            for (ApiDisasterMessage api : apiMessages) {
 
-            if (disasterMessageRepository
-                    .findByExternalId(api.getSn())
-                    .isPresent()) {
-                continue;
+                if (disasterMessageRepository
+                        .findByExternalId(api.getSn())
+                        .isPresent()) {
+                    continue;
+                }
+
+                DisasterMessage message = DisasterMessage.from(api);
+                DisasterMessage saved = disasterMessageRepository.save(message);
+
+                sseService.sendNewDisasterEvent(
+                        DisasterMessageSseDto.from(saved)
+                );
             }
-
-            DisasterMessage message = DisasterMessage.from(api);
-            DisasterMessage saved = disasterMessageRepository.save(message);
-
-            sseService.sendNewDisasterEvent(
-                    DisasterMessageSseDto.from(saved)
-            );
         }
+
     }
 
 
