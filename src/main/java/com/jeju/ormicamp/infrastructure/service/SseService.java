@@ -35,4 +35,17 @@ public class SseService {
             }
         });
     }
+
+    public void sendPing() {
+        sseEmitters.forEach((userId, emitter) -> {
+            try {
+                emitter.send(
+                        SseEmitter.event()
+                                .comment("ping")
+                );
+            } catch (IOException e) {
+                sseEmitters.remove(userId);
+            }
+        });
+    }
 }

@@ -16,8 +16,8 @@ public class TouristPlaceJdbcRepository {
 
         String sql = """
             INSERT INTO tourist_place
-            (name, lat, lon, road_address, image_url, type)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (name, lat, lon, road_address, image_url, type, score)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
         jdbcTemplate.update(
@@ -27,7 +27,8 @@ public class TouristPlaceJdbcRepository {
                 place.getLon(),
                 place.getRoadAddress(),
                 place.getImageUrl(),
-                place.getType().toString()
+                place.getType().toString(),
+                0
         );
     }
 
