@@ -17,13 +17,13 @@ spring:
   session:
     store-type: none
 
-  data:
-    redis:
-      host: master.redis-cluster.fejpnh.apn2.cache.amazonaws.com
-      port: 6379
-      timeout: 2000
-      ssl:
-        enabled: false
+#  data:
+#    redis:
+#      host: master.redis-cluster.fejpnh.apn2.cache.amazonaws.com
+#      port: 6379
+#      timeout: 2000
+#      ssl:
+#        enabled: false
 
 aws:
   region: ${AWS_REGION}
