@@ -12,6 +12,7 @@ import com.jeju.ormicamp.model.dto.map.walk.TmapWalkRawResponse;
 import com.jeju.ormicamp.model.dto.map.walk.TmapWalkRouteMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TmapRouteService {
 
+    @Qualifier("tmapWebClient")
     private final WebClient tmapWebClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 

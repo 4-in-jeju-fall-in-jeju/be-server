@@ -28,9 +28,11 @@ public class WebClientConfig {
                 .build();
     }
 
-    @Bean
+    @Bean(name = "tmapWebClient")
     @Primary
     public WebClient tmapWebClient(TmapProperties props) {
+
+        log.info("[TMAP CONFIG] baseUrl = {}", props.getBaseUrl());
 
         // appKey가 비어있으면 시작부터 터뜨리는 게 디버깅 빠름
         if (props.getAppKey() == null || props.getAppKey().isBlank()) {

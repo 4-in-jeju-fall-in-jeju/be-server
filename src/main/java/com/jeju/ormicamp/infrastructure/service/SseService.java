@@ -1,5 +1,6 @@
 package com.jeju.ormicamp.infrastructure.service;
 
+import com.jeju.ormicamp.model.dto.disasterMessage.DisasterMessageSseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -22,13 +23,13 @@ public class SseService {
         return emitter;
     }
 
-    public void sendNewDisasterEvent(Long disasterMessageId) {
+    public void sendNewDisasterEvent(DisasterMessageSseDto dto) {
         sseEmitters.forEach((userId, emitter) -> {
             try {
                 emitter.send(
                         SseEmitter.event()
                                 .name("disaster")
-                                .data(disasterMessageId)
+                                .data(dto)
                 );
             } catch (IOException e) {
                 sseEmitters.remove(userId);

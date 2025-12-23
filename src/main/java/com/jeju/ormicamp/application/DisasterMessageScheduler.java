@@ -16,7 +16,7 @@ public class DisasterMessageScheduler {
     /*
     * 1분 후 재실행
      */
-    @Scheduled(fixedDelay = 600_000)
+    @Scheduled(fixedDelay = 300_000)
     public void fetchDisasterMessages() {
         System.out.println("스케줄러 실행!");
         disasterMessageService.fetchAndSaveDisasterMessages();

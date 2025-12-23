@@ -9,6 +9,7 @@ import com.jeju.ormicamp.model.domain.DisasterMessage;
 import com.jeju.ormicamp.model.domain.DisasterMessageRead;
 import com.jeju.ormicamp.model.domain.DisasterMessageReadId;
 import com.jeju.ormicamp.model.dto.disasterMessage.DisasterMessageResponse;
+import com.jeju.ormicamp.model.dto.disasterMessage.DisasterMessageSseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,10 +75,12 @@ public class DisasterMessageServiceImpl implements DisasterMessageService {
             DisasterMessage message = DisasterMessage.from(api);
             DisasterMessage saved = disasterMessageRepository.save(message);
 
-            sseService.sendNewDisasterEvent(saved.getId());
+            sseService.sendNewDisasterEvent(
+                    DisasterMessageSseDto.from(saved)
+            );
         }
-
     }
+
 
     @Override
     public List<DisasterMessageResponse> getDisasterMessages() {
